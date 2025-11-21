@@ -19,7 +19,6 @@ app.post("/send-notification", async (req, res) => {
     const response = await sendNotification(token, title, body);
     res.json({ success: true, response });
   } catch (err) {
-    console.error(err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

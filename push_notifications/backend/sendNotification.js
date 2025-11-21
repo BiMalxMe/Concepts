@@ -1,43 +1,27 @@
-const { GoogleAuth } = require("google-auth-library");
-const axios = require("axios");
+// sendNotification.js
+const admin = require("firebase-admin");
 const serviceAccount = require("./service-account.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
-async function sendNotification(target, title, body) {
-  const auth = new GoogleAuth({
-    credentials: serviceAccount,
-    scopes: ["https://www.googleapis.com/auth/cloud-platform"],
-  });
-
-  const client = await auth.getClient();
-  const accessToken = await client.getAccessToken();
-
-  const projectId = serviceAccount.project_id;   // FIXED
-
-  const url = `https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`;
-
+async function sendNotification(token, title, body) {
   const message = {
-    message: {
-      token: target,  
-      notification: {
-        title: title,
-        body: body,
-      },
+    token,
+    notification: {
+      title,
+      body,
     },
   };
 
   try {
-    const response = await axios.post(url, message, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken.token}`,
-      },
-    });
-
-    return { success: true, data: response.data };
+    const response = await admin.messaging().send(message);
+    console.log("Successfully sent message:", response);
+    return response;
   } catch (error) {
-    console.log(error.response?.data);
-    return { success: false, error: error.response?.data };
+    console.error("Error sending notification:", error);
+    throw error;
   }
 }
 
-module.exports = sendNotification;
+module.exports = sendNotification; // ✅ Make sure this line exists
