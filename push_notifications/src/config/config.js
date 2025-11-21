@@ -1,11 +1,6 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
   apiKey: "AIzaSyD1XnsGlHhSH_AUsNWjXgmR4I5zNDY5u5Y",
   authDomain: "notificationloger-15c45.firebaseapp.com",
@@ -21,17 +16,22 @@ const messaging = getMessaging(app);
 
 export async function requestFcmToken() {
   try {
+    // Re-register explicitly (safe; browser dedupes)
+    const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+
     const token = await getToken(messaging, {
-      vapidKey: "YOUR_VAPID_KEY"
+      vapidKey: "BOzF6ofkgCg_D6blfgTwwUkuVPvPjL071bTB9G7ixh5lS1nMlbq0nCsxZXzu6YDhk4vAWk_9sSrsyxABBLTOXqM",
+      serviceWorkerRegistration: registration,
     });
+
     console.log("FCM Token:", token);
     return token;
+
   } catch (err) {
-    console.error(err);
+    console.error("Token Error:", err);
   }
 }
 
-// Receive notifications while app is open
 onMessage(messaging, (payload) => {
   console.log("Message received", payload);
 });
