@@ -1,1 +1,1 @@
-{"root":["./src/functionspararms.ts","./src/index.ts","./src/interfacefunction.ts","./src/interfaces.ts","./src/type.ts","./src/unions.ts"],"version":"5.8.3"}
+{"root":["./src/asreactprops.ts","./src/functionspararms.ts","./src/in.ts","./src/index.ts","./src/interfacefunction.ts","./src/interfaces.ts","./src/narrowing.ts","./src/set2.ts","./src/task1.ts","./src/type.ts","./src/unions.ts"],"version":"5.8.3"}

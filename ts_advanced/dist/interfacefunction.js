@@ -7,3 +7,8 @@ const user = {
     }
 };
 console.log(user.login());
+const dataa = {
+    id: 1,
+    name: "Bimal",
+    city: "Pokhara"
+};
